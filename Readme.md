@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
-* Студент: [Неопознанный енот](https://up.htmlacademy.ru/javascript-individual/1/user/2507851).
-* Наставник: `Неизвестно`.
+* Студент: [Алина Янина](https://up.htmlacademy.ru/javascript-individual/1/user/2507851).
+* Наставник: `Андрей Устименко`.
 
 ---
 
