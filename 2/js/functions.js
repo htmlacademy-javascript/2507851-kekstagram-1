@@ -1,19 +1,14 @@
 const isPalindrome = (str) => {
-  const tempString = str
-    .toLowerCase()
-    .replaceAll(' ', '');
+  const tempString = str.toLowerCase().replaceAll(' ', '');
 
+  const right = tempString.length - 1;
 
-  for (let i = 0; i < tempString.length; i ++) {
-    const el = tempString[i];
-
-    if(el !== tempString[tempString.length - 1 - i]) {
+  for(let i = 0; i < tempString.length / 2; i++) {
+    if(tempString[i] !== tempString[right - i]) {
       return false;
     }
     return true;
   }
-
-  return isPalindrome;
 };
 
 isPalindrome('топот');
@@ -28,14 +23,13 @@ const convertToNumber = (str) => {
   }
 
   let result = '';
+
   for(const value of str) {
     if (!Number.isNaN(parseInt(value,10))) {
       result += value;
     }
   }
-
   return parseInt(result, 10);
-
 };
 convertToNumber('2023 год');
 // имяФункции('2023 год');// 2023
@@ -45,21 +39,19 @@ convertToNumber('2023 год');
 // имяФункции('а я томат');
 
 
-const checkingStringLength = (string, length) => string.length <= length;
+const checkingStringLength = (str, length) => str.length <= length;
 
 checkingStringLength('проверяемая строка', 20);
 // checkingStringLength('проверяемая строка', 18);
 // checkingStringLength('проверяемая строка', 10);
 
-const myPadStart = (string, minLength, pad) => {
-  const actualPad = minLength - string.length;
+const myPadStart = (str, minLength, pad) => {
+  const actualPad = minLength - str.length;
 
   if(actualPad <= 0) {
-    return string;
+    return str;
   }
-
-  return pad.slice(0, actualPad % pad.length) + pad.repeat(actualPad / pad.length) + string;
-
+  return pad.slice(0, actualPad % pad.length) + pad.repeat(actualPad / pad.length) + str;
 };
 
 myPadStart('1', 2, '0');
