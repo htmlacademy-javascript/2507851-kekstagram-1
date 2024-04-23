@@ -1,36 +1,41 @@
-//1 Функция для проверки, является ли строка палиндромом.
-// Палиндром — это слово или фраза, которые одинаково читаются и слева направо и справа налево.
-let palindrome = (str) => {
-  str = str
-    .toString()
+const isPalindrome = (str) => {
+  const tempString = str
     .toLowerCase()
     .replaceAll(' ', '');
-  return str === str.split("").reverse().join("");
+
+
+  for (let i = 0; i < tempString.length; i ++) {
+    const el = tempString[i];
+
+    if(el !== tempString[tempString.length - 1 - i]) {
+      return false;
+    }
+    return true;
+  }
+
+  return isPalindrome;
 };
-palindrome('топот'); // true
-// Несмотря на разный регистр, тоже палиндром
-palindrome('ДовОд'); // true
-// Это не палиндром
-palindrome('Кекс'); //
 
-// Если хотите усложнить задание, предусмотрите случай, когда в строке встречаются пробелы.
-// Они не должны учитываться при проверке!
-palindrome('Лёша на полке клопа нашёл ');// true
+isPalindrome('топот');
+// isPalindrome('ДовОд');
+// isPalindrome('Кекс');
+// isPalindrome('Лёша на полке клопа нашёл ');
 
-//2 Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа.
-// Если в строке нет ни одной цифры, функция должна вернуть NaN:
-const convertToNumber = (string) => {
-  if (typeof string === 'number') {
-    return string;
+
+const convertToNumber = (str) => {
+  if (typeof str === 'number') {
+    return str;
   }
 
   let result = '';
-  for(let i = 0; i < string.length; i ++) {
-    if (!Number.isNaN(parseInt(string.at(i),10))) {
-      result += string.at(i);
+  for(const value of str) {
+    if (!Number.isNaN(parseInt(value,10))) {
+      result += value;
     }
   }
+
   return parseInt(result, 10);
+
 };
 convertToNumber('2023 год');
 // имяФункции('2023 год');// 2023
@@ -40,45 +45,25 @@ convertToNumber('2023 год');
 // имяФункции('а я томат');
 
 
-//3  Функция для проверки длины строки. Она принимает строку, которую нужно проверить, 
-// и максимальную длину и возвращает true, если строка меньше или равна указанной длине, 
-// и false, если строка длиннее. Эта функция нам пригодится для валидации формы.
+const checkingStringLength = (string, length) => string.length <= length;
 
-const isLessOrEquall = (string, length) => {
-  return string.length <= length;
-};
-
-isLessOrEquall('проверяемая строка', 20); // true
-// Длина строки ровно 18 символов
-isLessOrEquall('проверяемая строка', 18); // true
-// Строка длиннее 10 символов
-isLessOrEquall('проверяемая строка', 10);
-
-// 4 Функция, которая принимает три параметра: 
-// исходную строку, минимальную длину и строку с добавочными символами — 
-// и возвращает исходную строку, дополненную указанными символами до заданной длины. 
-// Символы добавляются в начало строки. Если исходная строка превышает заданную длину, 
-// она не должна обрезаться. Если «добивка» слишком длинная, она обрезается с конца.
+checkingStringLength('проверяемая строка', 20);
+// checkingStringLength('проверяемая строка', 18);
+// checkingStringLength('проверяемая строка', 10);
 
 const myPadStart = (string, minLength, pad) => {
   const actualPad = minLength - string.length;
-  
+
   if(actualPad <= 0) {
     return string;
   }
+
   return pad.slice(0, actualPad % pad.length) + pad.repeat(actualPad / pad.length) + string;
+
 };
 
-// myPadStart('1', 2, '0');      // '01'
-
-// // Добавочный символ использован три раза
-// myPadStart('1', 4, '0');      // '0001'
-
-// // Добавочные символы обрезаны с конца
-// myPadStart('q', 4, 'werty');  // 'werq'
-
-// // Добавочные символы использованы полтора раза
-// myPadStart('q', 4, 'we');     // 'wweq'
-
-// // Добавочные символы не использованы, исходная строка не изменена
+myPadStart('1', 2, '0');
+// myPadStart('1', 4, '0');
+// myPadStart('q', 4, 'werty');
+// myPadStart('q', 4, 'we');
 // myPadStart('qwerty', 4, '0');
