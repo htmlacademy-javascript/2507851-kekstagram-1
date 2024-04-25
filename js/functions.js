@@ -1,14 +1,13 @@
 const isPalindrome = (str) => {
-  const tempString = str.toLowerCase().replaceAll(' ', '');
+  const tempStr = str.toLowerCase().replaceAll(' ', '');
 
-  const right = tempString.length - 1;
-
-  for(let i = 0; i < tempString.length / 2; i++) {
-    if(tempString[i] !== tempString[right - i]) {
+  for (let i = 0, j = tempStr.length - 1; i < j; i++, j--) {
+    if (tempStr[i] !== tempStr[j]) {
       return false;
     }
-    return true;
   }
+
+  return true;
 };
 
 isPalindrome('топот');
@@ -24,11 +23,12 @@ const convertToNumber = (str) => {
 
   let result = '';
 
-  for(const value of str) {
+  for (const value of str) {
     if (!Number.isNaN(parseInt(value,10))) {
       result += value;
     }
   }
+
   return parseInt(result, 10);
 };
 convertToNumber('2023 год');
@@ -48,9 +48,10 @@ checkingStringLength('проверяемая строка', 20);
 const myPadStart = (str, minLength, pad) => {
   const actualPad = minLength - str.length;
 
-  if(actualPad <= 0) {
+  if (actualPad <= 0) {
     return str;
   }
+
   return pad.slice(0, actualPad % pad.length) + pad.repeat(actualPad / pad.length) + str;
 };
 
