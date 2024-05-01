@@ -1,10 +1,10 @@
 const PICTURE_COUNT = 25;
 const AVATAR_COUNT = 6;
-const LIKE_MIN_COUNT = 15;
-const LIKE_MAX_COUNT = 200;
-const COMMENT_COUNT = 10;
+const MIN_LIKES = 15;
+const MAX_LIKES = 200;
+const MAX_COMENTS = 10;
 
-const MESSAGE = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -31,48 +31,32 @@ const NAMES = ['Захар', 'Мари', 'Марк', 'Антон', 'Платон
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
+  return Math.floor(Math.random() * (upper - lower + 1)) + lower;
 };
 
-const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
+const getRandomArrayElement = (arr) => arr[getRandomInteger(0, arr.length - 1)];
 
-const createIdGenerator = () => {
-  let lastGeneratedId = 0;
-
-  return () => {
-    lastGeneratedId += 1;
-    return lastGeneratedId;
-  };
-};
-
-const generateCommentId = createIdGenerator();
-
-const createMessage = () =>
-  Array.from({ length: getRandomInteger(1, 2) }, () =>
-    getRandomArrayElement(MESSAGE)).join(' ');
-
-const createComment = () => ({
-  id: generateCommentId(),
+const createComment = (id) => ({
+  id,
   avatar: `img/avatar-${getRandomInteger(1, AVATAR_COUNT)}.svg`,
-  message: createMessage(),
   name: getRandomArrayElement(NAMES),
+  message: getRandomArrayElement(MESSAGES)
 });
 
-const createPicture = (index) => ({
-  id: index,
-  url: `photos/${index}.jpg`,
+const createPicture = (id) => ({
+  id,
+  url: `photos/${id}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(LIKE_MIN_COUNT, LIKE_MAX_COUNT),
+  likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
   comments: Array.from(
-    { length: getRandomInteger(0, COMMENT_COUNT) },
+    { length: getRandomInteger(0, MAX_COMENTS) },
     createComment
   ),
 });
 
-const getPictures = () =>
-  Array.from({ length: PICTURE_COUNT }, (_, pictureIndex) =>
+const createPicturesList = (arr) =>
+  Array.from({ length: arr }, (_, pictureIndex) =>
     createPicture(pictureIndex + 1)
   );
 
-getPictures();
+createPicturesList(PICTURE_COUNT);
