@@ -1,6 +1,5 @@
 import { getRandomInteger, getRandomArrayElement } from'./utils.js';
 
-const PICTURE_COUNT = 25;
 const AVATAR_COUNT = 6;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
@@ -48,9 +47,9 @@ const createPicture = (id) => ({
   ),
 });
 
-const createPicturesList = (arr) =>
-  Array.from({ length: arr }, (_, pictureIndex) =>
+export const createPicturesList = (length) =>
+  Array.from({ length }, (_, pictureIndex) =>
     createPicture(pictureIndex + 1)
   );
 
-createPicturesList(PICTURE_COUNT);
+
