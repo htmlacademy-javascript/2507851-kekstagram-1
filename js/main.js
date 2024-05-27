@@ -1,7 +1,7 @@
 import { createPicturesList } from './data.js';
-// import { renderGallery } from './gallery.js';
+import { renderGallery } from './gallery.js';
 
-// renderGallery(createPicturesList(25));
-import { renderPictures } from './container-picture.js';
+renderGallery(createPicturesList(25));
+// import { renderPictures } from './container-picture.js';
 
-renderPictures(createPicturesList(25));
+// renderPictures(createPicturesList(25));
