@@ -12,7 +12,7 @@ const createPhoto = ({ comments, description, likes, url}) => {
   return galleryImage;
 };
 
-const renderGallery = (pictures) => {
+export const renderGallery = (pictures) => {
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((picture) => {
@@ -23,4 +23,3 @@ const renderGallery = (pictures) => {
   containetTemplate.append(fragment);
 };
 
-export { renderGallery };
