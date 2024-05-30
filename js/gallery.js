@@ -1,3 +1,5 @@
+import {showBigPicture} from './big-picture.js';
+
 const gallery = document.querySelector('#picture').content.querySelector('.picture');
 const containetTemplate = document.querySelector('.pictures');
 
@@ -10,6 +12,7 @@ const createPhoto = ({ comments, description, likes, url}) => {
   galleryImage.querySelector('.picture__likes').textContent = likes;
 
   return galleryImage;
+
 };
 
 export const renderGallery = (pictures) => {
@@ -18,6 +21,10 @@ export const renderGallery = (pictures) => {
   pictures.forEach((picture) => {
     const pictureGallery = createPhoto(picture);
     fragment.append(pictureGallery);
+    pictureGallery.addEventListener('click', () => {
+      showBigPicture(picture);
+    });
+    fragment.appendChild(pictureGallery);
   });
 
   containetTemplate.append(fragment);
