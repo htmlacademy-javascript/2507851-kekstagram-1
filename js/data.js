@@ -1,4 +1,5 @@
 import { getRandomInteger, getRandomArrayElement } from'./utils.js';
+
 const AVATAR_COUNT = 6;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
