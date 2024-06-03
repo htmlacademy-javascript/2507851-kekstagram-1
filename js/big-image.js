@@ -37,4 +37,5 @@ export const showBigPicture = (picture) => {
 
   closeButton.addEventListener('click', onPopupCloseButtonClick);
   document.addEventListener('keydown', onPopupEscKeydown);
+
 };
