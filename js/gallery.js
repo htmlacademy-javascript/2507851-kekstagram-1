@@ -23,7 +23,6 @@ export const renderGallery = (pictures) => {
     pictureGallery.addEventListener('click', () => {
       showBigPicture(picture);
     });
-
   });
 
   containetTemplate.append(fragment);
