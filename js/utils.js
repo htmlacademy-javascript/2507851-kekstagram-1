@@ -7,4 +7,3 @@ export const getRandomInteger = (a, b) => {
 export const getRandomArrayElement = (arr) => arr[getRandomInteger(0, arr.length - 1)];
 
 export const isEscapeKey = (evt) => evt.key === 'Escape';
-
