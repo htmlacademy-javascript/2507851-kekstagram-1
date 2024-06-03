@@ -17,7 +17,6 @@ const onPopupCloseButtonClick = () => {
   closeBigPicture();
 };
 
-
 function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
