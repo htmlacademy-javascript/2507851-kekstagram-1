@@ -19,7 +19,6 @@ export const renderGallery = (pictures) => {
 
   pictures.forEach((picture) => {
     const pictureGallery = createPhoto(picture);
-
     fragment.append(pictureGallery);
     pictureGallery.addEventListener('click', () => {
       showBigPicture(picture);
