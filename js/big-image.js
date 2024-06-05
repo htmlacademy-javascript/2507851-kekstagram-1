@@ -7,6 +7,7 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
+
 const onPopupCloseButtonClick = () => {
   closeBigPicture();
 };
