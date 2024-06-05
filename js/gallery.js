@@ -13,6 +13,7 @@ const createPhoto = ({ comments, description, likes, url, id }) => {
   galleryImage.dataset.galleryImageId = id;
 
   return galleryImage;
+
 };
 
 export const renderGallery = (pictures) => {
