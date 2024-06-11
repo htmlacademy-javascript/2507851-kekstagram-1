@@ -6,6 +6,14 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsToShowCount = bigPicture.querySelector('.social__comment-count');
 
+function hideComments() {
+  commentsLoader.classList.add('hidden');
+  commentsToShowCount.classList.add('hidden');
+  commentsContainer.classList.add('hidden');
+}
+
+hideComments();
+
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -27,9 +35,6 @@ function closeBigPicture() {
 export const showBigPicture = (picture) => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  commentsLoader.classList.add('hidden');
-  commentsToShowCount.classList.add('hidden');
-  commentsContainer.classList.add('hidden');
 
   bigPicture.querySelector('.big-picture__img img').src = picture.url;
   bigPicture.querySelector('.likes-count').textContent = picture.likes;

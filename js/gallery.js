@@ -1,11 +1,11 @@
 import { showBigPicture } from './big-image.js';
 import { createPicturesList } from './data.js';
 
-const template = document.querySelector('#picture').content.querySelector('.picture');
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
 
 const createPhoto = ({ comments, description, likes, url, id }) => {
-  const galleryImage = template.cloneNode(true);
+  const galleryImage = pictureTemplate.cloneNode(true);
 
   galleryImage.querySelector('.picture__img').src = url;
   galleryImage.querySelector('.picture__img').alt = description;
@@ -14,7 +14,6 @@ const createPhoto = ({ comments, description, likes, url, id }) => {
   galleryImage.dataset.galleryImageId = id;
 
   return galleryImage;
-
 };
 
 export const renderGallery = (pictures) => {
@@ -28,17 +27,16 @@ export const renderGallery = (pictures) => {
 };
 
 gallery.addEventListener('click', (evt) => {
-  const thumbnail = evt.target.closest('.picture');
-  if (!thumbnail) {
+  const thumbnail = evt.target.closest('[data-gallery-image-id]');
+
+  if(!thumbnail) {
     return;
   }
 
-  const id = Number(thumbnail.dataset.id);
-  const photo = createPicturesList(id);
-  if(!photo) {
-    return;
-  }
-
-  showBigPicture(photo);
+  const pictureList = createPicturesList(25);
+  thumbnail.find(
+    (item) => item.id === +thumbnail.data.galleryImageId
+  );
+  showBigPicture(pictureList);
 });
-
+renderGallery(thumbnail);
