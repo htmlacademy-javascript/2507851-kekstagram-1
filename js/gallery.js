@@ -3,6 +3,7 @@ import { createPicturesList } from './data.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
+const pictureList = createPicturesList(25);
 
 const createPhoto = ({ comments, description, likes, url, id }) => {
   const galleryImage = pictureTemplate.cloneNode(true);
@@ -11,7 +12,7 @@ const createPhoto = ({ comments, description, likes, url, id }) => {
   galleryImage.querySelector('.picture__img').alt = description;
   galleryImage.querySelector('.picture__comments').textContent = comments.length;
   galleryImage.querySelector('.picture__likes').textContent = likes;
-  galleryImage.dataset.galleryImageId = id;
+  galleryImage.dataset.id = id;
 
   return galleryImage;
 };
@@ -23,20 +24,27 @@ export const renderGallery = (pictures) => {
     const pictureGallery = createPhoto(picture);
     fragment.append(pictureGallery);
   });
+
   gallery.append(fragment);
 };
 
 gallery.addEventListener('click', (evt) => {
-  const thumbnail = evt.target.closest('[data-gallery-image-id]');
+  const thumbnail = evt.target.closest('[data-id]');
 
-  if(!thumbnail) {
+  if (!thumbnail) {
     return;
   }
 
-  const pictureList = createPicturesList(25);
-  thumbnail.find(
-    (item) => item.id === +thumbnail.data.galleryImageId
+  const pictureData = pictureList.find(
+    (item) => item.id === +thumbnail.dataset.id
   );
-  showBigPicture(pictureList);
+
+  if (!pictureData) {
+    return;
+  }
+
+  showBigPicture(pictureData);
 });
-renderGallery(thumbnail);
+
+renderGallery(pictureList);
+
