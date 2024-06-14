@@ -9,6 +9,7 @@ const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsToShowCount = bigPicture.querySelector('.social__comment-count');
 
 let commentsShown = 0;
+
 const comments = [];
 
 const createComment = ({ avatar, name, message }) => {
