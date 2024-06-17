@@ -11,49 +11,57 @@ const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsToShowCount = bigPicture.querySelector('.social__comment-count');
 
 let commentsShown = 0;
-const commentsList = [];
+let currentRenderCommentsHandler;
 
 const createComment = ({ avatar, name, message }) => {
   const galleryComments = commentsListElement.cloneNode(true);
 
   galleryComments.querySelector('.social__picture').src = avatar;
-  galleryComments.querySelector('.social__picture').src = name;
+  galleryComments.querySelector('.social__picture').alt = name;
   galleryComments.querySelector('.social__text').textContent = message;
 
   return galleryComments;
 };
 
-const renderComments = (comment) => {
-  commentsShown += COMMENTS_PART;
-
-  if (commentsShown >= commentsList.length) {
-    commentsLoader.classList.add('hidden');
-    commentsShown = commentsList.length;
-  } else {
-    commentsLoader.classList.remove('hidden');
-    commentsToShowCount.classList.remove('hidden');
-  }
+const renderComments = (commentsList) => {
+  const newCommentsShown = Math.min(commentsList.length, commentsShown + COMMENTS_PART);
 
   const fragment = document.createDocumentFragment();
 
-  for (let i = 0; i < commentsShown; i++) {
+  for (let i = commentsShown; i < newCommentsShown; i++) {
 
     const commentElement = createComment(commentsList[i]);
     fragment.append(commentElement);
   }
   commentsContainer.append(fragment);
-  commentsToShowCount.querySelector('.current-comments-count').textContent = commentsShown;
+  commentsToShowCount.querySelector('.shown-comments-count').textContent = newCommentsShown;
+
+  commentsShown = newCommentsShown;
+
+  if (commentsShown >= commentsList.length) {
+    commentsLoader.classList.add('hidden');
+    commentsToShowCount.classList.remove('hidden');
+  } else {
+    commentsLoader.classList.remove('hidden');
+    commentsToShowCount.classList.remove('hidden');
+  }
 };
 
 const clickCommentsLoader = () => renderComments();
 
+const createRenderCommentsHandler = (comments) => {
+  renderComments(comments);
+};
+
 const renderDataComments = (commentElement) => {
   commentsShown = 0;
-  if (commentsList.length > 0) {
-    commentsList = commentElement;
-    renderComments(commentsList);
+
+  if (commentElement.length > 0) {
+
+    renderComments(commentElement);
   }
 };
+
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -69,9 +77,17 @@ function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onPopupEscKeydown);
-  closeButton.removeEventListener('click', clickCommentsLoader);
-  commentsLoader.removeEventListener('click', clickCommentsLoader);
-  commentsToShowCount.removeEventListener('click', clickCommentsLoader);
+
+  if (currentRenderCommentsHandler) {
+    closeButton.removeEventListener('click', currentRenderCommentsHandler);
+    commentsLoader.removeEventListener('click', currentRenderCommentsHandler);
+    commentsToShowCount.removeEventListener('click', currentRenderCommentsHandler);
+  }
+  const resetComments = () => {
+    commentsShown = 0;
+    commentsContainer.innerHTML = '';
+  };
+  resetComments();
 }
 
 export const showBigPicture = (picture) => {
@@ -80,12 +96,15 @@ export const showBigPicture = (picture) => {
 
   bigPicture.querySelector('.big-picture__img img').src = picture.url;
   bigPicture.querySelector('.likes-count').textContent = picture.likes;
-  bigPicture.querySelector('.comments-count').textContent = picture.comments;
+  bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
 
-  renderDataComments(picture, commentsList);
+  renderDataComments(picture.comments);
 
   closeButton.addEventListener('click', onPopupCloseButtonClick);
   document.addEventListener('keydown', onPopupEscKeydown);
+  currentRenderCommentsHandler = createRenderCommentsHandler(picture.comments);
   commentsLoader.addEventListener('click', clickCommentsLoader);
+  currentRenderCommentsHandler = createRenderCommentsHandler(picture.comments);
+  commentsLoader.addEventListener('click', currentRenderCommentsHandler);
 };
