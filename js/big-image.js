@@ -22,17 +22,18 @@ const createComment = ({ avatar, name, message }) => {
   return comment;
 };
 
-const renderComments = (comments) => {
-  const commentsToRender = comments.slice(commentsShown, commentsShown + COMMENTS_PART);
+const renderComments = () => {
+  const commentsToRender = currentComments.slice(commentsShown, commentsShown + COMMENTS_PART);
   commentsShown += commentsToRender.length;
 
-  if (commentsShown >= comments.length) {
+  if (commentsShown >= currentComments.length) {
     commentsLoader.classList.add('hidden');
   } else {
     commentsLoader.classList.remove('hidden');
   }
 
   const fragment = document.createDocumentFragment();
+
   commentsToRender.forEach((comment) => {
     fragment.append(createComment(comment));
   });
@@ -47,7 +48,7 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-const onRenderComments = () => renderComments(currentComments);
+const onCommentsLoaderClick = () => renderComments(currentComments);
 
 const resetComments = () => {
   commentsShown = 0;
@@ -59,7 +60,7 @@ const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onPopupEscKeydown);
-  commentsLoader.removeEventListener('click', onRenderComments);
+  commentsLoader.removeEventListener('click', onCommentsLoaderClick);
 
   resetComments();
 };
@@ -77,5 +78,5 @@ export const showBigPicture = (picture) => {
 
   closeButton.addEventListener('click', closeBigPicture);
   document.addEventListener('keydown', onPopupEscKeydown);
-  commentsLoader.addEventListener('click', onRenderComments);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
