@@ -23,28 +23,26 @@ const createComment = ({ avatar, name, message }) => {
   return galleryComments;
 };
 
-const renderComments = (commentsList) => {
-  const newCommentsShown = Math.min(commentsList.length, commentsShown + COMMENTS_PART);
+const renderComments = (comments) => {
+  commentsShown += COMMENTS_PART;
 
-  const fragment = document.createDocumentFragment();
-
-  for (let i = commentsShown; i < newCommentsShown; i++) {
-
-    const commentElement = createComment(commentsList[i]);
-    fragment.append(commentElement);
-  }
-  commentsContainer.append(fragment);
-  commentsToShowCount.querySelector('.shown-comments-count').textContent = newCommentsShown;
-
-  commentsShown = newCommentsShown;
-
-  if (commentsShown >= commentsList.length) {
+  if (commentsShown >= comments.length) {
     commentsLoader.classList.add('hidden');
-    commentsToShowCount.classList.remove('hidden');
+    commentsShown = comments.length;
   } else {
     commentsLoader.classList.remove('hidden');
     commentsToShowCount.classList.remove('hidden');
   }
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < commentsShown; i++) {
+
+    const commentElement = createComment(comments[i]);
+    fragment.append(commentElement);
+  }
+  commentsContainer.append(fragment);
+  commentsToShowCount.querySelector('.show-comments-count').textContent = commentsShown;
 };
 
 const clickCommentsLoader = () => renderComments();
@@ -57,7 +55,6 @@ const renderDataComments = (commentElement) => {
   commentsShown = 0;
 
   if (commentElement.length > 0) {
-
     renderComments(commentElement);
   }
 };
