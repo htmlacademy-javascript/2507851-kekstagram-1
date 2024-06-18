@@ -1,8 +1,8 @@
 import {isEscapeKey} from './utils.js';
 
-const commentsListElement = document.querySelector('#comment').content.querySelector('.social__comment');
-
 const COMMENTS_PART = 5;
+
+const commentsListElement = document.querySelector('#comment').content.querySelector('.social__comment');
 
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
@@ -37,10 +37,10 @@ const renderComments = (comments) => {
   const fragment = document.createDocumentFragment();
 
   for (let i = 0; i < commentsShown; i++) {
-
     const commentElement = createComment(comments[i]);
     fragment.append(commentElement);
   }
+
   commentsContainer.append(fragment);
   commentsToShowCount.querySelector('.show-comments-count').textContent = commentsShown;
 };
@@ -102,6 +102,4 @@ export const showBigPicture = (picture) => {
   document.addEventListener('keydown', onPopupEscKeydown);
   currentRenderCommentsHandler = createRenderCommentsHandler(picture.comments);
   commentsLoader.addEventListener('click', clickCommentsLoader);
-  currentRenderCommentsHandler = createRenderCommentsHandler(picture.comments);
-  commentsLoader.addEventListener('click', currentRenderCommentsHandler);
 };
