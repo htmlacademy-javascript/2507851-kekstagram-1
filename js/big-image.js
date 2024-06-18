@@ -23,7 +23,6 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 const renderComments = (comments) => {
-  currentComments = picture.comments;
   const commentsToRender = comments.slice(commentsShown, commentsShown + COMMENTS_PART);
   commentsShown += commentsToRender.length;
 
@@ -72,8 +71,9 @@ export const showBigPicture = (picture) => {
   bigPicture.querySelector('.likes-count').textContent = picture.likes;
   bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
+  currentComments = picture.comments;
 
-  renderComments(picture.comments);
+  renderComments();
 
   closeButton.addEventListener('click', closeBigPicture);
   document.addEventListener('keydown', onPopupEscKeydown);
