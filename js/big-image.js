@@ -15,6 +15,7 @@ let currentComments = [];
 
 const createComment = ({ avatar, name, message }) => {
   const comment = socialComment .cloneNode(true);
+
   comment.querySelector('.social__picture').src = avatar;
   comment.querySelector('.social__picture').alt = name;
   comment.querySelector('.social__text').textContent = message;
@@ -37,8 +38,16 @@ const renderComments = () => {
   commentsToRender.forEach((comment) => {
     fragment.append(createComment(comment));
   });
+
   commentsContainer.append(fragment);
   showCommentsCount.textContent = commentsShown;
+};
+
+const onCommentsLoaderClick = () => renderComments();
+
+const resetComments = () => {
+  commentsShown = 0;
+  commentsContainer.innerHTML = '';
 };
 
 const onPopupEscKeydown = (evt) => {
@@ -48,22 +57,14 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-const onCommentsLoaderClick = () => renderComments(currentComments);
-
-const resetComments = () => {
-  commentsShown = 0;
-  commentsContainer.innerHTML = '';
-  currentComments = [];
-};
-
-const closeBigPicture = () => {
+function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onPopupEscKeydown);
   commentsLoader.removeEventListener('click', onCommentsLoaderClick);
 
   resetComments();
-};
+}
 
 export const showBigPicture = (picture) => {
   bigPicture.classList.remove('hidden');
