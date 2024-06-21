@@ -3,6 +3,7 @@ import Pristine from 'pristinejs';
 const MAX_HASHTAG_COUNT = 5;
 
 const VALID_SINBOLS = /^#[a-za-яё0-9]{1, 19}$/i;
+
 const ErrorText = {
   INVALID_COUNT: `Максимум ${MAX_HASHTAG_COUNT} хештегов`,
   NOT_INQUE: 'Хештеги не должны повторяться',
