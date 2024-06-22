@@ -1,7 +1,4 @@
-import Pristine from 'pristinejs';
-
 const MAX_HASHTAG_COUNT = 5;
-
 const VALID_SINBOLS = /^#[a-za-яё0-9]{1, 19}$/i;
 
 const ErrorText = {
@@ -53,7 +50,9 @@ const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUN
 
 const hasUniqueTags = (value) => {
   const lowerCaseTags = normalizeTags(value).map((tag) => tag.toLowerCase());
+
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
+
 };
 
 function onDocumentKeydown(evt) {
@@ -75,14 +74,12 @@ pristine.addValidator(
   hashtagField,
   hasValidCount,
   ErrorText.INVALID_COUNT,
-
 );
 
 pristine.addValidator(
   hashtagField,
   hasUniqueTags,
   ErrorText.NOT_INQUE,
-
 );
 
 pristine.addValidator(
