@@ -7,7 +7,6 @@ const ErrorText = {
   INVALID_PATTERN: 'Неправильный хештег',
 };
 
-const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
@@ -23,7 +22,7 @@ const pristine = new Pristine(form, {
 
 const showModal = () => {
   overlay.classList.remove('hidden');
-  body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
@@ -31,7 +30,7 @@ const hideModal = () => {
   form.reset();
   pristine.reset();
   overlay.classList.add('hidden');
-  body.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
@@ -39,17 +38,17 @@ const isTextFieldFocused = () =>
   document.activeElement === hashtagField ||
   document.activeElement === commentField;
 
-const normalizeTags = (tagString) => tagString
+const valueTags = (tagString) => tagString
   .trin()
   .split('')
   .filter((tag) => Boolean(tag.length));
 
-const hasValidTags = (value) => normalizeTags(value).every((tag) => VALID_SINBOLS.test(tag));
+const isTagsValid = (value) => valueTags(value).every((tag) => VALID_SINBOLS.test(tag));
 
-const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
+const isTagsCountValid = (value) => valueTags(value).length <= MAX_HASHTAG_COUNT;
 
-const hasUniqueTags = (value) => {
-  const lowerCaseTags = normalizeTags(value).map((tag) => tag.toLowerCase());
+const isTagsUnique = (value) => {
+  const lowerCaseTags = valueTags(value).map((tag) => tag.toLowerCase());
 
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 
@@ -72,20 +71,23 @@ const onFileInputChange = () => {
 
 pristine.addValidator(
   hashtagField,
-  hasValidCount,
+  isTagsCountValid,
   ErrorText.INVALID_COUNT,
+  1, true
 );
 
 pristine.addValidator(
   hashtagField,
-  hasUniqueTags,
+  isTagsValid,
   ErrorText.NOT_INQUE,
+  2, true
 );
 
 pristine.addValidator(
   hashtagField,
-  hasValidTags,
+  isTagsUnique,
   ErrorText.INVALID_PATTERN,
+  3, true
 );
 
 fileField.addEventListener('change', onFileInputChange);
