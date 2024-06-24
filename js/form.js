@@ -24,7 +24,6 @@ const pristine = new Pristine(form, {
 const showModal = () => {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
-
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
