@@ -2,12 +2,6 @@ const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
 
-const ErrorText = {
-  INVALID_COUNT: 'Максимум хештегов',
-  NOT_UNIQUE: 'Хештеги не должны повторяться',
-  INVALID_PATTERN: 'Неправильный хештег',
-};
-
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
@@ -69,7 +63,6 @@ function onDocumentKeydown(evt) {
 
 const onCancelButtonClick = () => {
   hideForm();
-  ErrorText();
 };
 
 const onFileInputChange = () => {
