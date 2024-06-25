@@ -1,21 +1,14 @@
-import Pristine from 'pristinejs';
-
 const MAX_HASHTAG_COUNT = 5;
+const MAX_COMMENT_LENGTH = 140;
+const INVALID_HASHTAG = 'Неверный формат хэштэгов';
+const INVALID_MAX_COMMENT_LENGTH = 'длина комментария не может быть больше 140 символов';
+const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
 
-const VALID_SINBOLS = /^#[a-za-яё0-9]{1, 19}$/i;
-
-const ErrorText = {
-  INVALID_COUNT: `Максимум ${MAX_HASHTAG_COUNT} хештегов`,
-  NOT_INQUE: 'Хештеги не должны повторяться',
-  INVALID_PATTERN: 'Неправильный хештег',
-};
-
-const body = document.querySelector('body');
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const fileField = document.querySelector('.img-upload__input');
-const hashtagField = document.querySelector('.img-upload__hashtags');
+const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 
 const pristine = new Pristine(form, {
@@ -24,18 +17,18 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__field-wrapper__error',
 });
 
-const showModal = () => {
+const showForm = () => {
   overlay.classList.remove('hidden');
-  body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const hideModal = () => {
+const hideForm = () => {
   form.reset();
   pristine.reset();
   overlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
 const isTextFieldFocused = () =>
@@ -43,53 +36,55 @@ const isTextFieldFocused = () =>
   document.activeElement === commentField;
 
 const normalizeTags = (tagString) => tagString
-  .trin()
-  .split('')
+  .trim()
+  .split(' ')
   .filter((tag) => Boolean(tag.length));
 
-const hasValidTags = (value) => normalizeTags(value).every((tag) => VALID_SINBOLS.test(tag));
+const isCommentValid = (value) => value.length <= MAX_COMMENT_LENGTH;
 
-const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
+const isTagsCountValid = (tags) => tags.length <= MAX_HASHTAG_COUNT;
 
-const hasUniqueTags = (value) => {
-  const lowerCaseTags = normalizeTags(value).map((tag) => tag.toLowerCase());
+const isTagsUnique = (tags) => {
+  const lowerCaseTags = tags.map((tag) => tag.toLowerCase());
+
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 };
 
+const isTagsValid = (tags) => tags.every((tag) => TAG_PATTERN.test(tag));
+
+const validateHashTags = (value) => {
+  const tags = normalizeTags(value);
+
+  return isTagsCountValid(tags) && isTagsUnique(tags) && isTagsValid(tags);
+};
+
 function onDocumentKeydown(evt) {
-  if(evt.key === 'Escape' && !isTextFieldFocused()) {
+  if (evt.key === 'Escape' && !isTextFieldFocused()) {
     evt.preventDefault();
-    hideModal();
+    hideForm();
   }
 }
 
 const onCancelButtonClick = () => {
-  hideModal();
+  hideForm();
 };
 
 const onFileInputChange = () => {
-  showModal();
+  showForm();
 };
 
-pristine.addValidator(
-  hashtagField,
-  hasValidCount,
-  ErrorText.INVALID_COUNT,
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
 
-);
-
-pristine.addValidator(
-  hashtagField,
-  hasUniqueTags,
-  ErrorText.NOT_INQUE,
-
-);
-
-pristine.addValidator(
-  hashtagField,
-  hasValidTags,
-  ErrorText.INVALID_PATTERN,
-);
+  if (pristine.validate()) {
+    form.submit();
+  }
+};
+pristine.addValidator(hashtagField, validateHashTags, INVALID_HASHTAG);
+pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);
 
 fileField.addEventListener('change', onFileInputChange);
-cancelButton.addEventListener('change', onCancelButtonClick);
+cancelButton.addEventListener('click', onCancelButtonClick);
+form.addEventListener('submit', onFormSubmit);
+
+
