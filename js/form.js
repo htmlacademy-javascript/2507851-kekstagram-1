@@ -1,5 +1,7 @@
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
+const INVALID_HASHTAG = 'Неверный формат хэштэгов';
+const INVALID_MAX_COMMENT_LENGTH = 'длина комментария не может быть больше 140 символов';
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
 
 const form = document.querySelector('.img-upload__form');
@@ -40,19 +42,21 @@ const normalizeTags = (tagString) => tagString
 
 const isCommentValid = (value) => value.length <= MAX_COMMENT_LENGTH;
 
-const isTagsValid = (value) => normalizeTags (value).every((tag) => TAG_PATTERN.test(tag));
+const isTagsCountValid = (tags) => tags.length <= MAX_HASHTAG_COUNT;
 
-const isTagsCountValid = (value) => normalizeTags (value).length <= MAX_HASHTAG_COUNT;
-
-const isTagsUnique = (value) => {
-  const lowerCaseTags = normalizeTags (value).map((tag) => tag.toLowerCase());
+const isTagsUnique = (tags) => {
+  const lowerCaseTags = tags.map((tag) => tag.toLowerCase());
 
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 };
 
-function validateHashTags (value) {
-  return isTagsCountValid(value) && isTagsUnique(value) && isTagsValid(value);
-}
+const isTagsValid = (tags) => tags.every((tag) => TAG_PATTERN.test(tag));
+
+const validateHashTags = (value) => {
+  const tags = normalizeTags(value);
+
+  return isTagsCountValid(tags) && isTagsUnique(tags) && isTagsValid(tags);
+};
 
 function onDocumentKeydown(evt) {
   if (evt.key === 'Escape' && !isTextFieldFocused()) {
@@ -71,13 +75,16 @@ const onFileInputChange = () => {
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
+
   if (pristine.validate()) {
     form.submit();
   }
 };
-pristine.addValidator(hashtagField, validateHashTags, 'Неверный формат хэштэгов');
-pristine.addValidator(commentField, isCommentValid, 'длина комментария не может быть больше 140 символов');
+pristine.addValidator(hashtagField, validateHashTags, INVALID_HASHTAG);
+pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
 form.addEventListener('submit', onFormSubmit);
+
+
