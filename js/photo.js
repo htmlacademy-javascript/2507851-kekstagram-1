@@ -1,4 +1,4 @@
-const filterList = {
+const FILTERS = {
   none: {
     min: 0,
     max: 0,
@@ -49,85 +49,75 @@ const filterList = {
   }
 };
 
-const sliderEffectLevel = document.querySelector('.effect-level__slider');
-const sliderParent = document.querySelector('.img-upload__effect-level');
-const inputValueSlider = document.querySelector('.effect-level__value');
-const currentPhoto = document.querySelector('.img-upload__preview img');
-const listFilter = document.querySelector('.effects__list');
-const listFilterOriginal = listFilter.querySelector('#effect-none');
+const DEFAULT_FILTERS = FILTERS[0];
+let selectedEffect = DEFAULT_FILTERS;
 
-const createSlider = () => {
-  noUiSlider.create(sliderEffectLevel, {
-    range: {
-      min: 0,
-      max: 100,
-    },
-    start: 80,
-    step: 1,
-    connect: 'lower',
-    format: {
-      to: (value) => value,
-      from: (value) => parseFloat(value),
-    }
-  });
-};
+const imagePreview = document.querySelector('.img-upload__preview img');
+const sliderEffectLevel = document.querySelector('.effect-level__slider');
+const uploadEffectLevel = document.querySelector('.img-upload__effect-level');
+const effectLevelInput = document.querySelector('.effect-level__value');
+const effectsList = document.querySelector('.effects');
+
+const isDefault = () => selectedEffect === DEFAULT_FILTERS;
 
 const showSlider = () => {
-  sliderEffectLevel.removeAttribute('disabled', true);
-  sliderParent.classList.remove('hidden');
+  uploadEffectLevel.classList.remove('hidden');
 };
 
 const hideSlider = () => {
-  sliderEffectLevel.setAttribute('disabled', true);
-  sliderParent.classList.add('hidden');
+  uploadEffectLevel.classList.add('hidden');
 };
 
-const clearStyle = () => {
-  currentPhoto.style.filter = '';
-};
-
-hideSlider();
-
-let currentSettings = {};
-
-listFilter.addEventListener('change', (evt) => {
-  const currentFilter = filterList[evt.target.value];
-
+const createSlider = () => {
   sliderEffectLevel.noUiSlider.updateOptions({
     range: {
-      min: currentFilter.min,
-      max: currentFilter.max,
+      min: selectedEffect.min,
+      max:selectedEffect.max,
     },
-    step: currentFilter.step,
-    start: currentFilter.start,
+    step: selectedEffect.step,
+    start: selectedEffect.max,
   });
 
-  currentSettings = {
-    filter: currentFilter.filter,
-    units: currentFilter.units
-  };
-
-  showSlider();
-  clearStyle();
-
-  if (evt.target.value === 'none') {
+  if (isDefault()) {
     hideSlider();
+  } else {
+    showSlider();
   }
-  currentPhoto.style.filter = `${currentFilter.filter}(${currentFilter.max}${currentFilter.units})`;
-});
+};
 
-export const initSlider = () => {
+const onEffectsChange = (evt) => {
+
+  if (!evt.target.classList.contains('effects__radio')) {
+
+    return;
+  }
+  selectedEffect = FILTERS.find((filter) => filter.name === evt.target.value);
+  imagePreview.className = `effects__preview--${selectedEffect.name}`;
   createSlider();
-
-  sliderEffectLevel.noUiSlider.on('update', () => {
-    inputValueSlider.value = sliderEffectLevel.noUiSlider.get();
-    currentPhoto.style.filter = `${currentSettings.filter}(${inputValueSlider.value}${currentSettings.units})`;
-  });
 };
 
-const sliderClear = () => {
-  listFilterOriginal.checked = true;
-  hideSlider();
-  currentPhoto.style.filter = '';
+const onSliderUpdate = () => {
+  const sliderValue = sliderEffectLevel.noUiSlider.get();
+  imagePreview.style.filter = isDefault()
+    ? DEFAULT_FILTERS.style : `${selectedEffect.style}(${sliderValue}${selectedEffect.unit})`;
+  effectLevelInput.value = sliderValue;
 };
-sliderClear();
+
+export const resetEffects = () => {
+  selectedEffect = DEFAULT_FILTERS;
+  createSlider();
+};
+
+noUiSlider.create(sliderEffectLevel, {
+  range: {
+    min: DEFAULT_FILTERS.min,
+    max: DEFAULT_FILTERS.max,
+  },
+  start: DEFAULT_FILTERS.max,
+  step: DEFAULT_FILTERS.step,
+  connect: 'lower',
+});
+hideSlider();
+
+effectsList.addEventListener('change', onEffectsChange);
+sliderEffectLevel.noUiSlider.on('update', onSliderUpdate);

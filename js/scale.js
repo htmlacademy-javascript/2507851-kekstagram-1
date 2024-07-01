@@ -1,54 +1,39 @@
-const COUNT_STEP = 25;
-const MAX_PHOTO_SIZE = 100;
-const MIN_PHOTO_SIZE = 25;
+const SCALE_IMAGE_STEP = 25;
+const SCALE_IMAGE_MIN = 25;
+const SCALE_IMAGE_MAX = 100;
+const DEFAULT_SCALE = 100;
 
-const scaleButtonSmaller = document.querySelector('.scale__control--smaller');
-const scaleButtonBigger = document.querySelector('.scale__control--bigger');
-const scalePhotoSize = document.querySelector('.scale__control--value');
-const currentPhoto = document.querySelector('.img-upload__preview img');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imageUploadPreview = document.querySelector('.img-upload__preview img');
 
-let currentValue = parseInt(scalePhotoSize.value, 10);
-
-const reducingPhoto = () => {
-  scaleButtonSmaller.addEventListener('click', () => {
-
-    if (currentValue <= MIN_PHOTO_SIZE){
-      return false;
-    }
-
-    currentValue = currentValue - COUNT_STEP;
-    const currentScale = currentValue / 100;
-    scalePhotoSize.value = `${currentValue}%`;
-    currentPhoto.style.transform = `scale(${currentScale})`;
-
-    return currentValue;
-  });
+const scaleImage = (value) => {
+  imageUploadPreview.style.transform = `scale(${value / 100})`;
+  scaleControlValue.value = `${value}%`;
 };
 
-const enlargesPhoto = () => {
-  scaleButtonBigger.addEventListener('click', () => {
+const onSmallerButtonClick = () => {
+  const currentValue = parseInt(scaleControlValue.value, 10);
+  let newValue = currentValue - SCALE_IMAGE_STEP;
 
-    if (currentValue >= MAX_PHOTO_SIZE){
-      return false;
-    }
-
-    currentValue = currentValue + COUNT_STEP;
-    const currentScale = currentValue / 100;
-    scalePhotoSize.value = `${currentValue}%`;
-    currentPhoto.style.transform = `scale(${currentScale})`;
-
-    return currentValue;
-  });
+  if (newValue < SCALE_IMAGE_MIN) {
+    newValue = SCALE_IMAGE_MIN;
+  }
+  scaleImage(newValue);
 };
 
-export const clearPhotoSize = () => {
-  currentValue = 100;
-  currentPhoto.style.transform = 'scale(1)';
-  scalePhotoSize.value = '100%';
+const onBiggerButtonClick = () => {
+  const currentValue = parseInt(scaleControlValue.value, 10);
+  let newValue = currentValue + SCALE_IMAGE_STEP;
+
+  if (newValue > SCALE_IMAGE_MAX) {
+    newValue = SCALE_IMAGE_MAX ;
+  }
+  scaleImage(newValue);
 };
 
+export const resetScale = () => scaleImage(DEFAULT_SCALE);
 
-export const resetScale = () => {
-  reducingPhoto();
-  enlargesPhoto();
-};
+scaleControlSmaller.addEventListener('click', onSmallerButtonClick);
+scaleControlBigger.addEventListener('click', onBiggerButtonClick);

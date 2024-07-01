@@ -1,4 +1,5 @@
-import {clearPhotoSize } from './scale.js';
+import {resetScale } from './scale.js';
+import {resetEffects } from './photo.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
@@ -27,7 +28,8 @@ const showForm = () => {
 
 const hideForm = () => {
   form.reset();
-  clearPhotoSize();
+  resetScale();
+  resetEffects();
   pristine.reset();
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
