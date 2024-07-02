@@ -68,7 +68,7 @@ const hideSlider = () => {
   uploadEffectLevel.classList.add('hidden');
 };
 
-const createSlider = () => {
+const setSliderValue = () => {
   sliderEffectLevel.noUiSlider.updateOptions({
     range: {
       min: selectedEffect.min,
@@ -78,22 +78,22 @@ const createSlider = () => {
     start: selectedEffect.max,
   });
 
+
+};
+
+const onEffectsChange = (evt) => {
   if (isDefault()) {
     hideSlider();
   } else {
     showSlider();
   }
-};
-
-const onEffectsChange = (evt) => {
 
   if (!evt.target.classList.contains('effects__radio')) {
-
     return;
   }
   selectedEffect = FILTERS.find((filter) => filter.name === evt.target.value);
   imagePreview.className = `effects__preview--${selectedEffect.name}`;
-  createSlider();
+  setSliderValue();
 };
 
 const onSliderUpdate = () => {
@@ -105,7 +105,7 @@ const onSliderUpdate = () => {
 
 export const resetEffects = () => {
   selectedEffect = DEFAULT_FILTERS;
-  createSlider();
+  setSliderValue();
 };
 
 noUiSlider.create(sliderEffectLevel, {

@@ -19,6 +19,7 @@ const onSmallerButtonClick = () => {
 
   if (newValue < SCALE_IMAGE_MIN) {
     newValue = SCALE_IMAGE_MIN;
+
   }
   scaleImage(newValue);
 };
