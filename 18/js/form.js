@@ -1,5 +1,5 @@
 import {resetScale } from './scale.js';
-import {resetEffects } from './photo.js';
+import {resetEffects } from './effects.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
