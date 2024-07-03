@@ -97,7 +97,7 @@ const onSliderUpdate = () => {
   const sliderValue = sliderEffectLevel.noUiSlider.get();
   imagePreview.style.filter = isDefault()
     ? ''
-    : `${selectedEffect.filter}`(`${sliderValue}${selectedEffect.units}`);
+    : `${selectedEffect.filter}(${sliderValue}${selectedEffect.units}`;
   effectLevelInput.value = sliderValue;
 };
 

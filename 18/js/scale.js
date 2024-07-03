@@ -11,6 +11,7 @@ const imageUploadPreview = document.querySelector('.img-upload__preview img');
 const scaleImage = (value) => {
   imageUploadPreview.style.transform = `scale(${value / DEFAULT_SCALE})`;
   scaleControlValue.value = `${value}%`;
+  return parseFloat(value);
 };
 
 const getInputValue = () => parseInt(scaleControlValue.value, 10);
