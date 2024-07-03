@@ -49,7 +49,7 @@ const FILTERS = {
   }
 };
 
-const DEFAULT_FILTERS = FILTERS[0];
+const DEFAULT_FILTERS = FILTERS;
 let selectedEffect = DEFAULT_FILTERS;
 
 const imagePreview = document.querySelector('.img-upload__preview img');
@@ -77,11 +77,10 @@ const setSliderValue = () => {
     step: selectedEffect.step,
     start: selectedEffect.max,
   });
-
-
 };
 
 const onEffectsChange = (evt) => {
+
   if (isDefault()) {
     hideSlider();
   } else {
@@ -92,7 +91,7 @@ const onEffectsChange = (evt) => {
     return;
   }
   selectedEffect = FILTERS.find((filter) => filter.name === evt.target.value);
-  imagePreview.className = `effects__preview--${selectedEffect.name}`;
+  imagePreview.className = `effects__preview-${selectedEffect.name}`;
   setSliderValue();
 };
 
