@@ -9,29 +9,19 @@ const scaleControlValue = document.querySelector('.scale__control--value');
 const imageUploadPreview = document.querySelector('.img-upload__preview img');
 
 const scaleImage = (value) => {
-  imageUploadPreview.style.transform = `scale(${value / 100})`;
+  imageUploadPreview.style.transform = `scale(${value / DEFAULT_SCALE})`;
   scaleControlValue.value = `${value}%`;
-  return parseFloat(value);
 };
 
+const getInputValue = () => parseInt(scaleControlValue.value, 10);
+
 const onSmallerButtonClick = () => {
-  const currentValue = parseInt(scaleControlValue.value, 10);
-  let newValue = currentValue - SCALE_IMAGE_STEP;
-
-  if (newValue < SCALE_IMAGE_MIN) {
-    newValue = SCALE_IMAGE_MIN;
-
-  }
+  const newValue = Math.max(getInputValue() - SCALE_IMAGE_STEP, SCALE_IMAGE_MIN);
   scaleImage(newValue);
 };
 
 const onBiggerButtonClick = () => {
-  const currentValue = parseInt(scaleControlValue.value, 10);
-  let newValue = currentValue + SCALE_IMAGE_STEP;
-
-  if (newValue > SCALE_IMAGE_MAX) {
-    newValue = SCALE_IMAGE_MAX ;
-  }
+  const newValue = Math.min(getInputValue() + SCALE_IMAGE_STEP, SCALE_IMAGE_MAX);
   scaleImage(newValue);
 };
 
