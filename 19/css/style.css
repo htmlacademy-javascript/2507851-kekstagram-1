@@ -1213,6 +1213,18 @@ main {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.data-error__title {
+  position: absolute;
+  font-size: 15;
+  padding: 10px 3 px;
+  text-align: center;
+  background-color: #e90000;
+
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}
 .error__inner,
 .success__inner {
   position: relative;

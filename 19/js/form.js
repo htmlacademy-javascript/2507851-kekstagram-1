@@ -1,5 +1,7 @@
 import {resetScale } from './scale.js';
 import {resetEffects } from './effects.js';
+import { showMessageError, showMessageSuccess } from './message.js';
+import { sendDate } from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
@@ -13,18 +15,12 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
-const buttonSubmit = document.querySelector('.img-upload__submit');
+const submitButton = form.querySelector('.img-upload__submit');
 
-const blockSubmitButton = () => {
-  buttonSubmit.disabled = true;
-  buttonSubmit.textContent = 'Публикую...';
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
 };
-
-const unblockSubmitButton = () => {
-  buttonSubmit.disabled = false;
-  buttonSubmit.textContent = 'Опубликовать';
-};
-
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -90,15 +86,33 @@ const onFileInputChange = () => {
   showForm();
 };
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
 export const onFormSubmit = (onSuccess) => {
-  form.addEventListener('submit', async(evt) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    if (pristine.validate()) {
-      form.submit();
+    const isValid = pristine.validate();
+
+    if (isValid) {
       blockSubmitButton();
-      await onSuccess(new FormData(form));
-      unblockSubmitButton();
+      sendDate(new FormData(evt.target))
+        .then(onSuccess)
+        .then(showMessageSuccess)
+        .catch(
+          (err) => {
+            showMessageError(err.message);
+          }
+        )
+        .finally(unblockSubmitButton);
     }
   });
 };
@@ -108,5 +122,5 @@ pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
-form.addEventListener('submit', onFormSubmit);
+
 
