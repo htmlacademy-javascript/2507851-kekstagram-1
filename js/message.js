@@ -1,57 +1,56 @@
-import { isEscapeKey } from './utils.js';
+const DATA_ERROR_SHOW_TIME = 5000;
 
-const successTemplate = document.querySelector('#success').content.querySelector('.success');
-const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-const successFragment = document.createDocumentFragment();
-const errorFragment = document.createDocumentFragment();
+const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
+const messageError = document.querySelector('#error').content.querySelector('.error');
+const messageSuccess = document.querySelector('#success').content.querySelector('.success');
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const showMessageSuccess = () => {
-  const messageSuccess = successTemplate.cloneNode(true);
-  successFragment.appendChild(messageSuccess);
-  document.body.appendChild(successFragment);
-  const buttonSuccess = document.querySelector('.success__button');
-  const sectionSuccess = document.querySelector('.success');
-  const successInner = document.querySelector('.success__inner');
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      sectionSuccess.remove();
-    }
-  });
-  sectionSuccess.addEventListener(('click'), (evt) => {
-    if (evt.target === buttonSuccess) {
-      sectionSuccess.remove();
-    }
-  });
-  sectionSuccess.addEventListener(('click'), (evt) => {
-    if (evt.target === successInner) {
-      sectionSuccess.remove();
-    }
-  });
+const onMessageEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideMessage();
+  }
 };
 
-const showMessageError = () => {
-  const messageError = errorTemplate.cloneNode(true);
-  errorFragment.appendChild(messageError);
-  document.body.appendChild(errorFragment);
-  const buttonError = document.querySelector('.error__button');
-  const sectionError = document.querySelector('.error');
-  const errorInner = document.querySelector('.error__inner');
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      sectionError.remove();
-    }
-  });
-  sectionError.addEventListener(('click'), (evt) => {
-    if (evt.target === buttonError) {
-      sectionError.remove();
-    }
-  });
-  sectionError.addEventListener(('click'), (evt) => {
-    if (evt.target === errorInner) {
-      sectionError.remove();
-    }
-  });
+function hideMessage () {
+  const exitMessage = document.querySelector('.success') || document.querySelector('.error');
+  exitMessage.remove();
+  document.removeEventListener('keydown', onMessageEscKeydown);
+  document.body.removeEventListener('click', onBodyClick);
+}
+
+const onCloseButtonClick = () => {
+  hideMessage();
 };
 
-export {showMessageSuccess, showMessageError};
+function onBodyClick(evt) {
+  if (evt.target.closest('.success__inner') || (evt.target.closest('.error__inner'))) {
+    return;
+  }
+  hideMessage();
+}
+
+const showMessage = (title, buttonClass) => {
+  document.body.append(title);
+  document.body.addEventListener('click', onBodyClick);
+  document.addEventListener('keydown', onMessageEscKeydown);
+  title.querySelector(buttonClass).addEventListener('click', onCloseButtonClick);
+};
+
+export const showMessageError = () => {
+  showMessage(messageError, '.error__button');
+};
+
+export const showMessageSuccess = () => {
+  showMessage(messageSuccess, '.success__button');
+};
+
+export const showDataError = () => {
+  const dataError = dataErrorTemplate.cloneNode(true);
+  document.body.append(dataError);
+
+  setTimeout(() => {
+    dataError.remove();
+  }, DATA_ERROR_SHOW_TIME);
+};

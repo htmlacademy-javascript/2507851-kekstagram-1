@@ -1,23 +1,17 @@
-import {hideForm, onFormSubmit} from './form.js';
+import './form.js';
+import {getData} from './api.js';
 import {renderGallery} from'./gallery.js';
-import { showMessageSuccess, showMessageError } from './message.js';
-import { getData,sendDate } from './api.js';
-import { showAlert } from './utils.js';
+import {showDataError} from './message.js';
+import {onFormSubmit, hideForm} from './form.js';
 
-onFormSubmit(async (data) => {
-  try {
-    await sendDate(data);
-    hideForm();
-    showMessageSuccess();
-  } catch {
-    showMessageError();
-  }
+getData()
+  .then((pictureList) => {
+    renderGallery(pictureList);
+  })
+  .catch(
+    (err) => {
+      showDataError(err.message);
+    }
+  );
 
-});
-
-try {
-  const data = await getData();
-  renderGallery(data);
-} catch (err) {
-  showAlert(err.message);
-}
+onFormSubmit(hideForm);
