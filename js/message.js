@@ -1,52 +1,53 @@
 const DATA_ERROR_SHOW_TIME = 5000;
 
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
-const messageError = document.querySelector('#error').content.querySelector('.error');
-const messageSuccess = document.querySelector('#success').content.querySelector('.success');
+const errorDialogTemplate = document.querySelector('#error').content.querySelector('.error');
+const successDialogTemplate = document.querySelector('#success').content.querySelector('.success');
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const onMessageEscKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    hideMessage();
+    hideDialog();
   }
 };
 
-function hideMessage () {
+function hideDialog () {
   const exitMessage = document.querySelector('.success') || document.querySelector('.error');
   exitMessage.remove();
-  document.removeEventListener('keydown', onMessageEscKeydown);
-  document.body.removeEventListener('click', onBodyClick);
+  document.removeEventListener('keydown', onDocumentKeydown);
+  document.body.removeEventListener('click', onDocumentClick);
 }
 
 const onCloseButtonClick = () => {
-  hideMessage();
+  hideDialog();
 };
 
-function onBodyClick(evt) {
+function onDocumentClick(evt) {
   if (evt.target.closest('.success__inner') || (evt.target.closest('.error__inner'))) {
     return;
   }
-  hideMessage();
+
+  hideDialog();
 }
 
 const showMessage = (title, buttonClass) => {
   document.body.append(title);
-  document.body.addEventListener('click', onBodyClick);
-  document.addEventListener('keydown', onMessageEscKeydown);
+  document.body.addEventListener('click', onDocumentClick);
+  document.addEventListener('keydown', onDocumentKeydown);
   title.querySelector(buttonClass).addEventListener('click', onCloseButtonClick);
 };
 
-export const showMessageError = () => {
-  showMessage(messageError, '.error__button');
+export const showErrorDialog = () => {
+  showMessage(errorDialogTemplate, '.error__button');
 };
 
-export const showMessageSuccess = () => {
-  showMessage(messageSuccess, '.success__button');
+export const showSuccessDialog = () => {
+  showMessage(successDialogTemplate, '.success__button');
 };
 
-export const showDataError = () => {
+export const showAlert = () => {
   const dataError = dataErrorTemplate.cloneNode(true);
   document.body.append(dataError);
 

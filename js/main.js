@@ -1,7 +1,6 @@
-import './form.js';
 import {getData} from './api.js';
 import {renderGallery} from'./gallery.js';
-import {showDataError} from './message.js';
+import {showAlert} from './message.js';
 import {onFormSubmit, hideForm} from './form.js';
 
 getData()
@@ -10,7 +9,7 @@ getData()
   })
   .catch(
     (err) => {
-      showDataError(err.message);
+      showAlert(err.message);
     }
   );
 

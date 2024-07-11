@@ -1,6 +1,6 @@
 import {resetScale } from './scale.js';
 import {resetEffects } from './effects.js';
-import { showMessageError, showMessageSuccess } from './message.js';
+import { showErrorDialog, showSuccessDialog } from './message.js';
 import { sendDate } from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
@@ -106,10 +106,10 @@ export const onFormSubmit = (onSuccess) => {
       blockSubmitButton();
       sendDate(new FormData(evt.target))
         .then(onSuccess)
-        .then(showMessageSuccess)
+        .then(showSuccessDialog)
         .catch(
           (err) => {
-            showMessageError(err.message);
+            showErrorDialog(err.message);
           }
         )
         .finally(unblockSubmitButton);
