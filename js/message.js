@@ -1,8 +1,9 @@
 const DATA_ERROR_SHOW_TIME = 5000;
 
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
-const errorDialogTemplate = document.querySelector('#error').content.querySelector('.error');
-const successDialogTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorDialogTemplate = document.querySelector('#error-response').content.querySelector('.response');
+const successDialogTemplate = document.querySelector('#success-response').content.querySelector('.response');
+const responseButton = document.querySelector('.response-button');
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -14,7 +15,7 @@ const onDocumentKeydown = (evt) => {
 };
 
 function hideDialog () {
-  const exitMessage = document.querySelector('.success') || document.querySelector('.error');
+  const exitMessage = document.querySelector('.response');
   exitMessage.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
   document.body.removeEventListener('click', onDocumentClick);
@@ -25,26 +26,26 @@ const onCloseButtonClick = () => {
 };
 
 function onDocumentClick(evt) {
-  if (evt.target.closest('.success__inner') || (evt.target.closest('.error__inner'))) {
+  if (evt.target.closest('.response')) {
     return;
   }
 
   hideDialog();
 }
 
-const showMessage = (title, buttonClass) => {
-  document.body.append(title);
+const showDialog = (template, responseButton) => {
+  document.body.append(template);
   document.body.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  title.querySelector(buttonClass).addEventListener('click', onCloseButtonClick);
+  template.querySelector(responseButton).addEventListener('click', onCloseButtonClick);
 };
 
 export const showErrorDialog = () => {
-  showMessage(errorDialogTemplate, '.error__button');
+  showDialog(errorDialogTemplate, '.error__button');
 };
 
 export const showSuccessDialog = () => {
-  showMessage(successDialogTemplate, '.success__button');
+  showDialog(successDialogTemplate, '.success__button');
 };
 
 export const showAlert = () => {
