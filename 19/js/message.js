@@ -1,52 +1,54 @@
+import { isEscapeKey } from './utils.js';
+
 const DATA_ERROR_SHOW_TIME = 5000;
 
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
-const messageError = document.querySelector('#error').content.querySelector('.error');
-const messageSuccess = document.querySelector('#success').content.querySelector('.success');
+const errorDialogTemplate = document.querySelector('#error-response').content.querySelector('.response');
+const successDialogTemplate = document.querySelector('#success-response').content.querySelector('.response');
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
-
-const onMessageEscKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    hideMessage();
+    hideDialog();
   }
 };
 
-function hideMessage () {
-  const exitMessage = document.querySelector('.success') || document.querySelector('.error');
-  exitMessage.remove();
-  document.removeEventListener('keydown', onMessageEscKeydown);
-  document.body.removeEventListener('click', onBodyClick);
-}
+function hideDialog () {
+  const activeDialog = document.querySelector('.response');
 
-const onCloseButtonClick = () => {
-  hideMessage();
-};
-
-function onBodyClick(evt) {
-  if (evt.target.closest('.success__inner') || (evt.target.closest('.error__inner'))) {
+  if (!activeDialog) {
     return;
   }
-  hideMessage();
+
+  activeDialog.remove();
+  document.removeEventListener('keydown', onDocumentKeydown);
+  document.body.removeEventListener('click', onDocumentClick);
 }
 
-const showMessage = (title, buttonClass) => {
-  document.body.append(title);
-  document.body.addEventListener('click', onBodyClick);
-  document.addEventListener('keydown', onMessageEscKeydown);
-  title.querySelector(buttonClass).addEventListener('click', onCloseButtonClick);
+function onDocumentClick(evt) {
+  if (evt.target.closest('.response')) {
+    return;
+  }
+
+  hideDialog();
+}
+
+const showDialog = (template) => {
+  document.body.append(template);
+  document.addEventListener('click', hideDialog);
+  document.addEventListener('keydown', onDocumentKeydown);
+  template.querySelector('.dialog__cta—close').addEventListener('click',);
 };
 
-export const showMessageError = () => {
-  showMessage(messageError, '.error__button');
+export const showErrorDialog = () => {
+  showDialog(errorDialogTemplate, '.error__button');
 };
 
-export const showMessageSuccess = () => {
-  showMessage(messageSuccess, '.success__button');
+export const showSuccessDialog = () => {
+  showDialog(successDialogTemplate, '.success__button');
 };
 
-export const showDataError = () => {
+export const showAlert = () => {
   const dataError = dataErrorTemplate.cloneNode(true);
   document.body.append(dataError);
 

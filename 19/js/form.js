@@ -1,6 +1,6 @@
 import {resetScale } from './scale.js';
 import {resetEffects } from './effects.js';
-import { showMessageError, showMessageSuccess } from './message.js';
+import { showErrorDialog, showSuccessDialog } from './message.js';
 import { sendDate } from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
@@ -86,36 +86,34 @@ const onFileInputChange = () => {
   showForm();
 };
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
+const toggleSubmitButton = (disabled) => {
+  submitButton.disabled = disabled;
+  submitButton.textContent = disabled ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
 };
 
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-export const onFormSubmit = (onSuccess) => {
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  const isValid = pristine.validate();
 
-    const isValid = pristine.validate();
+  if (isValid) {
+    toggleSubmitButton(true);
+    sendDate(new FormData(evt.target))
+      .then (
+        () => {
+          hideForm();
+          showSuccessDialog();
+        }
+      )
+      .catch(
+        (err) => {
+          showErrorDialog(err.message);
+        }
+      )
+      .finally(toggleSubmitButton(false));
+  }
+});
 
-    if (isValid) {
-      blockSubmitButton();
-      sendDate(new FormData(evt.target))
-        .then(onSuccess)
-        .then(showMessageSuccess)
-        .catch(
-          (err) => {
-            showMessageError(err.message);
-          }
-        )
-        .finally(unblockSubmitButton);
-    }
-  });
-};
 
 pristine.addValidator(hashtagField, validateHashTags, INVALID_HASHTAG);
 pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);
