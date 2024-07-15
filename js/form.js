@@ -86,36 +86,34 @@ const onFileInputChange = () => {
   showForm();
 };
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
+const toggleSubmitButton = (disabled) => {
+  submitButton.disabled = disabled;
+  submitButton.textContent = disabled ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
 };
 
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-export const onFormSubmit = (onSuccess) => {
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  const isValid = pristine.validate();
 
-    const isValid = pristine.validate();
+  if (isValid) {
+    toggleSubmitButton(true);
+    sendDate(new FormData(evt.target))
+      .then (
+        () => {
+          hideForm();
+          showSuccessDialog();
+        }
+      )
+      .catch(
+        (err) => {
+          showErrorDialog(err.message);
+        }
+      )
+      .finally(toggleSubmitButton(false));
+  }
+});
 
-    if (isValid) {
-      blockSubmitButton();
-      sendDate(new FormData(evt.target))
-        .then(onSuccess)
-        .then(showSuccessDialog)
-        .catch(
-          (err) => {
-            showErrorDialog(err.message);
-          }
-        )
-        .finally(unblockSubmitButton);
-    }
-  });
-};
 
 pristine.addValidator(hashtagField, validateHashTags, INVALID_HASHTAG);
 pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);

@@ -1,7 +1,8 @@
+import './form.js';
 import {getData} from './api.js';
 import {renderGallery} from'./gallery.js';
 import {showAlert} from './message.js';
-import {onFormSubmit, hideForm} from './form.js';
+
 
 getData()
   .then((pictureList) => {
@@ -13,4 +14,3 @@ getData()
     }
   );
 
-onFormSubmit(hideForm);
