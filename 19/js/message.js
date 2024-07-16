@@ -1,3 +1,5 @@
+
+
 import { isEscapeKey } from './utils.js';
 
 const DATA_ERROR_SHOW_TIME = 5000;
@@ -9,6 +11,7 @@ const successDialogTemplate = document.querySelector('#success-response').conten
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
+    evt.stopPropagation();
     hideDialog();
   }
 };
@@ -20,9 +23,10 @@ function hideDialog () {
     return;
   }
 
+  activeDialog.querySelector('.dialog__cta—close').removeEventListener('click', hideDialog);
   activeDialog.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
-  document.body.removeEventListener('click', onDocumentClick);
+  document.removeEventListener('click', onDocumentClick);
 }
 
 function onDocumentClick(evt) {
@@ -35,17 +39,17 @@ function onDocumentClick(evt) {
 
 const showDialog = (template) => {
   document.body.append(template);
-  document.addEventListener('click', hideDialog);
+  document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  template.querySelector('.dialog__cta—close').addEventListener('click',);
+  template.querySelector('.dialog__cta—close').addEventListener('click', hideDialog);
 };
 
 export const showErrorDialog = () => {
-  showDialog(errorDialogTemplate, '.error__button');
+  showDialog(errorDialogTemplate);
 };
 
 export const showSuccessDialog = () => {
-  showDialog(successDialogTemplate, '.success__button');
+  showDialog(successDialogTemplate);
 };
 
 export const showAlert = () => {
