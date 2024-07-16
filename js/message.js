@@ -41,7 +41,7 @@ const showDialog = (template) => {
   document.body.append(template);
   document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  template.querySelector('.dialog__cta—close').addEventListener('click', hideDialog); // добавлен обработчик на кнопку
+  template.querySelector('.dialog__cta—close').addEventListener('click', hideDialog);
 };
 
 export const showErrorDialog = () => {
