@@ -1,5 +1,3 @@
-
-
 import { isEscapeKey } from './utils.js';
 
 const DATA_ERROR_SHOW_TIME = 5000;

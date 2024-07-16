@@ -1,6 +1,6 @@
 import {resetScale } from './scale.js';
 import {resetEffects } from './effects.js';
-import { showErrorDialog, showSuccessDialog } from './message.js';
+import { showErrorDialog, showSuccessDialog } from './dialogs.js';
 import { sendDate } from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
