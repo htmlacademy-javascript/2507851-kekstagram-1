@@ -1197,8 +1197,8 @@ main {
  * Экраны ошибки и успеха загрузки изображения
  */
 
-.error,
-.success {
+
+.response {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -1213,20 +1213,7 @@ main {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.data-error {
-  position: absolute;
-  font-size: 15;
-  padding: 10px 3 px;
-  text-align: center;
-  background-color: #e90000;
-
-  left: 0;
-  top: 0;
-  right: 0;
-  z-index: 100;
-}
-.error__inner,
-.success__inner {
+.response-error__inner {
   position: relative;
   width: 600px;
   padding: 50px 20px;
@@ -1248,12 +1235,34 @@ main {
   border-radius: 10px;
 }
 
-.success__inner {
+.response-success__inner {
+  position: relative;
+  width: 600px;
+  padding: 50px 20px;
+  padding-top: 150px;
+  margin-top: 200px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Open Sans", "Arial", sans-serif;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: #ffe753;
+
+  background-color: #3c3614;
+  border-radius: 10px;
+}
+
+.response-success__inner {
   padding: 100px 20px;
   padding-bottom: 75px;
 }
 
-.error__title {
+.response-error__title {
   position: relative;
 
   margin: 0;
@@ -1262,14 +1271,14 @@ main {
   font-size: 32px;
 }
 
-.success__title {
+.response-success__title {
   margin: 0;
   margin-bottom: 50px;
 
   font-size: 32px;
 }
 
-.error__title::before {
+.response-error__title::before {
   content: "";
   position: absolute;
 
@@ -1286,8 +1295,7 @@ main {
           transform: translateX(-50%);
 }
 
-.error__button,
-.success__button {
+.dialog__cta—close {
   padding: 5px 10px;
 
   color: #ffffff;
@@ -1298,15 +1306,15 @@ main {
   border-radius: 5px;
 }
 
-.error__button:hover,
-.error__button:focus,
-.success__button:hover,
-.success__button:focus {
+.dialog__cta—close:hover,
+.dialog__cta—close:focus,
+.dialog__cta—close:hover,
+.dialog__cta—close:focus {
   opacity: 0.8;
 }
 
-.error__button:active,
-.success__button:active {
+.dialog__cta—close:active,
+.dialog__cta—close:active {
   opacity: 0.6;
 }
 
@@ -1347,6 +1355,18 @@ main {
           transform: translateX(-50%);
 }
 
+.data-error {
+  position: absolute;
+  font-size: 15;
+  padding: 10px 3 px;
+  text-align: center;
+  background-color: #e90000;
+
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}
 
 /* Адаптивности чуток
    ========================================================================== */
