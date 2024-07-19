@@ -3,7 +3,7 @@ import { createPicturesList } from './data.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
-const pictureList = createPicturesList(25);
+const pictureList = createPicturesList();
 
 const createPhoto = ({ comments, description, likes, url, id }) => {
   const galleryImage = pictureTemplate.cloneNode(true);
