@@ -2,36 +2,32 @@ import { isEscapeKey } from './utils.js';
 
 const DATA_ERROR_SHOW_TIME = 5000;
 
-const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
-const errorDialogTemplate = document.querySelector('#error-response').content.querySelector('.response');
-const successDialogTemplate = document.querySelector('#success-response').content.querySelector('.response');
+const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('data-error');
+const errorDialogTemplate = document.querySelector('#error').content.querySelector('[data-dialog]');
+const successDialogTemplate = document.querySelector('#success').content.querySelector('[data-dialog]');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
+    evt.stopPropagation();
     hideDialog();
   }
 };
 
 function hideDialog () {
-  const activeDialog = document.querySelector('.response');
+  const activeDialog = document.querySelector('[data-dialog]');
 
   if (!activeDialog) {
     return;
   }
 
   activeDialog.remove();
-  document.removeEventListener('keydown', onDocumentKeydown);
-  document.removeEventListener('click', onDocumentClick,true);
+  document.removeEventListener('keydown', onDocumentKeydown, true);
+  document.removeEventListener('click', onDocumentClick);
 }
 
 function onDocumentClick(evt) {
-  const activeDialog = document.querySelector('.response');
-  if (!activeDialog) {
-    return;
-  }
-
-  if (!evt.target.closest('.response')) {
+  if (evt.target.matches('[data-dialog]')) {
     hideDialog();
   }
 }
@@ -39,8 +35,9 @@ function onDocumentClick(evt) {
 const showDialog = (template) => {
   const dialogElement = template.cloneNode(true);
   document.body.append(dialogElement);
-  document.addEventListener('click', onDocumentClick, true);
-  dialogElement.querySelector('.dialog__cta—close').addEventListener('click', () => {
+  document.addEventListener('click', onDocumentClick);
+  document.addEventListener('keydown', onDocumentKeydown, true);
+  dialogElement.querySelector('[data-dialog-close]')?.addEventListener('click', () => {
     hideDialog();
   });
 };

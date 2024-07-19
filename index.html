@@ -201,21 +201,21 @@
   </template>
 
   <!-- Сообщение с ошибкой загрузки изображения -->
-  <template id="error-response">
-    <section class="response">
-      <div class="response-error__inner">
-        <h2 class="response-error__title">Ошибка загрузки файла</h2>
-        <button type="button" class="dialog__cta—close error-button">Попробовать ещё раз</button>
+  <template id="error">
+    <section data-dialog class="error">
+      <div data-dialog-inner class="error__inner">
+        <h2 class="error__title">Ошибка загрузки файла</h2>
+        <button data-dialog-close type="button" class="error__button">Загрузить другой файл</button>
       </div>
     </section>
   </template>
 
   <!-- Сообщение об успешной загрузке изображения -->
-  <template id="success-response">
-    <section class="response">
-      <div class="response-success__inner">
-        <h2 class="response-success__title">Изображение успешно загружено</h2>
-        <button type="button" class="dialog__cta—close success-button">Круто!</button>
+  <template id="success">
+    <section data-dialog class="success">
+      <div data-dialog-inner class="success__inner">
+        <h2 class="success__title">Изображение успешно загружено</h2>
+        <button data-dialog-close type="button" class="success__button">Круто!</button>
       </div>
     </section>
   </template>
@@ -225,7 +225,7 @@
       <h2 class="data-error__title">Не удалось загрузить данные</h2>
     </section>
   </template>
-
+  
   <template id="comment">
     <li class="social__comment">
       <img
