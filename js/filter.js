@@ -14,6 +14,7 @@ const filtersContainer = document.querySelector('.img-filters');
 const filtersForm = filtersContainer.querySelector('.img-filters__form');
 
 const sortByRandom = (photos) => shufflePhotos(photos).slice(0, RANDOM_PHOTO_COUNT);
+
 const sortByComment = (photos) =>photos.toSorted((a, b) => b.comments.length - a.comments.length);
 
 const getFilteredPhotos = (filter, photos) => {
@@ -29,12 +30,9 @@ const getFilteredPhotos = (filter, photos) => {
 
 let currentFilter = FilterType.DEFAULT;
 
-const activateFilterButton = (element) => {
+const switchActiveFilterButton = (element) => {
   const buttonActive = filtersContainer.querySelector('.img-filters__button--active');
-
-  if (buttonActive) {
-    buttonActive.classList.remove('img-filters__button--active');
-  }
+  buttonActive?.classList.remove('img-filters__button--active');
   element.classList.add('img-filters__button--active');
 };
 
@@ -46,7 +44,7 @@ const repaint = (filter, photos, element) => {
     photosContainer.forEach((photo) => photo.remove());
 
     initGallery(filteredPhotos);
-    activateFilterButton(element);
+    switchActiveFilterButton (element);
     currentFilter = filter;
   }
 };
