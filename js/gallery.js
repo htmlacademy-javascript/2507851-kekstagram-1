@@ -50,5 +50,4 @@ gallery.addEventListener('click', (evt) => {
   showBigPicture(pictureData);
 });
 
-renderGallery(pictureList);
 

@@ -12,19 +12,22 @@ export const isEscapeKey = (evt) => evt.key === 'Escape';
 
 export const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
+
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 };
 
-export const shufflePhotos = (photos) => {
-  const copyPhotos = photos.slice();
+export const shufflePhotos = (array, amount) => array.slice().sort(() => Math.random() - 0.5).slice(0, amount);
 
-  for (let i = photos.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copyPhotos[i], copyPhotos[j]] = [copyPhotos[j], copyPhotos[i]];
-  }
+// export const shufflePhotos = (photos) => {
+//   const copyPhotos = photos.slice();
 
-  return copyPhotos;
-};
+//   for (let i = photos.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [copyPhotos[i], copyPhotos[j]] = [copyPhotos[j], copyPhotos[i]];
+//   }
+
+//   return copyPhotos;
+// };

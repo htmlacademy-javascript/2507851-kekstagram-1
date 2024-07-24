@@ -1,8 +1,7 @@
-import { debounce, shufflePhotos } from './utils.js';
+import { debounce, shufflePhotos} from './utils.js';
 import { initGallery } from './gallery.js';
 
 const RANDOM_PHOTO_COUNT = 10;
-
 const RERENDER_DELAY = 500;
 
 const FilterType = {
@@ -17,11 +16,13 @@ const filterBtnDefault = filtersForm.querySelector('#filter-default');
 const filterBtnRandom = filtersForm.querySelector('#filter-random');
 const filterBtnDiscussed = filtersForm.querySelector('#filter-discussed');
 
-const handleFilter = {
+const getFilteredPhotos = {
   [FilterType.DEFAULT]: (photos) => photos,
   [FilterType.RANDOM]: (photos) => shufflePhotos(photos).slice(0, RANDOM_PHOTO_COUNT),
   [FilterType.DISCUSSED]: (photos) => photos.slice().sort((a, b) => b.comments.length - a.comments.length)
 };
+
+let currentFilter = FilterType.DEFAULT;
 
 const activateFilterButton = (element) => {
   const buttonActive = filtersContainer.querySelector('.img-filters__button--active');
@@ -29,12 +30,10 @@ const activateFilterButton = (element) => {
   element.target.classList.add('img-filters__button--active');
 };
 
-let currentFilter = FilterType.DEFAULT;
-
 const repaint = (element, filter, photos) => {
 
   if (currentFilter !== filter) {
-    const filteredPhotos = handleFilter[filter](photos);
+    const filteredPhotos = getFilteredPhotos[filter](photos);
     const photosContainer = document.querySelectorAll('.picture');
     photosContainer.forEach((photo) => photo.remove());
 
@@ -64,4 +63,26 @@ export const initFilters = (photos) => {
     activateFilterButton(evt);
   });
 };
+
+// const sortByRandom = (photos) => shufflePhotos(photos).slice(0, RANDOM_PHOTO_COUNT);
+
+// const sortByComment = (photos) =>photos.toSorted((a, b) => b.comments.length - a.comments.length);
+
+
+// export const initFilters(debounce(
+//   (clickedElement) => {
+
+//     switch (clickedElement.id) {
+//       case FilterType.DEFAULT:
+//         initGallery(pictures);
+//         break;
+//       case FilterType.RANDOM:
+//         initGallery(sortByRandom(pictures, RANDOM_PHOTO_COUNT));
+//         break;
+//       case FilterType.DISCUSSED:
+//         initGallery(sortByComment(pictures));
+//         break;
+//     }
+//   }, RERENDER_DELAY)
+// );
 
