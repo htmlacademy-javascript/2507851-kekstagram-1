@@ -1,20 +1,19 @@
 import { debounce, shufflePhotos } from './utils.js';
-import { initGallery } from './gallery.js';
+import { initGallery, getPicturesList, removePictures } from './gallery.js';
 
 const RANDOM_PHOTO_COUNT = 10;
 const RERENDER_DELAY = 500;
 
 const FilterType = {
-  DEFAULT: 'default',
-  RANDOM: 'random',
-  DISCUSSED: 'discussed'
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
 };
 
 const filtersContainer = document.querySelector('.img-filters');
 const filtersForm = filtersContainer.querySelector('.img-filters__form');
 
 const sortByRandom = (photos) => shufflePhotos(photos).slice(0, RANDOM_PHOTO_COUNT);
-
 const sortByComment = (photos) =>photos.toSorted((a, b) => b.comments.length - a.comments.length);
 
 const getFilteredPhotos = (filter, photos) => {
@@ -37,27 +36,26 @@ const switchActiveFilterButton = (element) => {
 };
 
 const repaint = (filter, photos, element) => {
-
-  if (currentFilter !== filter) {
-    const filteredPhotos = getFilteredPhotos(filter, photos);
-    const photosContainer = document.querySelectorAll('.picture');
-    photosContainer.forEach((photo) => photo.remove());
-
-    initGallery(filteredPhotos);
-    switchActiveFilterButton (element);
-    currentFilter = filter;
+  if (currentFilter === filter) {
+    return;
   }
+
+  const filteredPhotos = getFilteredPhotos(filter, photos);
+  removePictures();
+  initGallery(filteredPhotos);
+  switchActiveFilterButton(element);
+  currentFilter = filter;
 };
 
 const debouncedRepaint = debounce((filter, photos, element) => repaint(filter, photos, element), RERENDER_DELAY);
 
-export const initFilters = (photos) => {
+export const initFilters = () => {
   filtersContainer.classList.remove('img-filters--inactive');
+  const photos = getPicturesList();
 
   filtersForm.addEventListener('click', (evt) => {
-
     if (evt.target.classList.contains('img-filters__button')) {
-      const filter = evt.target.id.replace('filter-', '');
+      const filter = evt.target.id;
       debouncedRepaint(filter, photos, evt.target);
     }
   });
