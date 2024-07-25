@@ -46,9 +46,11 @@ gallery.addEventListener('click', (evt) => {
   if (!pictureData) {
     return;
   }
-
   showBigPicture(pictureData);
 });
+export const getPicturesList = () => pictureList;
 
-renderGallery(pictureList);
-
+export const removePictures = () => {
+  const photosContainer = document.querySelectorAll('.picture');
+  photosContainer.forEach((photo) => photo.remove());
+};

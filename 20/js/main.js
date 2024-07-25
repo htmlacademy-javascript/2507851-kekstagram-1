@@ -8,11 +8,12 @@ import {initFilters} from './filter.js';
 getData()
   .then((pictureList) => {
     initGallery(pictureList);
-    initFilters(pictureList);
+    initFilters();
   })
   .catch(
     (err) => {
       showAlert(err.message);
     }
   );
+
 
