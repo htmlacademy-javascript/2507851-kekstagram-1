@@ -27,8 +27,14 @@ export const renderGallery = (pictures) => {
   gallery.append(fragment);
 };
 
+const removePictures = () => {
+  const photosContainer = document.querySelectorAll('.picture');
+  photosContainer.forEach((photo) => photo.remove());
+};
+
 export const initGallery = (pictures) => {
   pictureList = pictures;
+  removePictures();
   renderGallery(pictureList);
 };
 
@@ -48,9 +54,5 @@ gallery.addEventListener('click', (evt) => {
   }
   showBigPicture(pictureData);
 });
-export const getPicturesList = () => pictureList;
 
-export const removePictures = () => {
-  const photosContainer = document.querySelectorAll('.picture');
-  photosContainer.forEach((photo) => photo.remove());
-};
+export const getPicturesList = () => pictureList;

@@ -1,5 +1,5 @@
 import { debounce, shufflePhotos } from './utils.js';
-import { initGallery, getPicturesList, removePictures } from './gallery.js';
+import { initGallery, getPicturesList } from './gallery.js';
 
 const RANDOM_PHOTO_COUNT = 10;
 const RERENDER_DELAY = 500;
@@ -35,28 +35,27 @@ const switchActiveFilterButton = (element) => {
   element.classList.add('img-filters__button--active');
 };
 
-const repaint = (filter, photos, element) => {
+const repaint = (element) => {
+  const filter = element.id;
   if (currentFilter === filter) {
     return;
   }
 
+  const photos = getPicturesList();
   const filteredPhotos = getFilteredPhotos(filter, photos);
-  removePictures();
   initGallery(filteredPhotos);
   switchActiveFilterButton(element);
   currentFilter = filter;
 };
 
-const debouncedRepaint = debounce((filter, photos, element) => repaint(filter, photos, element), RERENDER_DELAY);
+const debouncedRepaint = debounce((element) => repaint(element), RERENDER_DELAY);
 
 export const initFilters = () => {
   filtersContainer.classList.remove('img-filters--inactive');
-  const photos = getPicturesList();
 
   filtersForm.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('img-filters__button')) {
-      const filter = evt.target.id;
-      debouncedRepaint(filter, photos, evt.target);
+      debouncedRepaint(evt.target);
     }
   });
 };
