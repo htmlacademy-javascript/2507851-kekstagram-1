@@ -34,7 +34,6 @@ export const removePictures = () => {
 
 export const initGallery = (pictures) => {
   pictureList = pictures;
-  // removePictures();
   renderGallery(pictureList);
 };
 
