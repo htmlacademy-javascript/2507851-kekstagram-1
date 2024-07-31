@@ -1,5 +1,5 @@
-import { debounce, shufflePhotos } from './utils.js';
-import { initGallery, getPicturesList } from './gallery.js';
+import { debounce} from './utils.js';
+import { renderGallery, getPicturesList, removePictures } from './gallery.js';
 
 const RANDOM_PHOTO_COUNT = 10;
 const RERENDER_DELAY = 500;
@@ -12,11 +12,14 @@ const FilterType = {
 
 const filtersContainer = document.querySelector('.img-filters');
 const filtersForm = filtersContainer.querySelector('.img-filters__form');
+let currentFilter = FilterType.DEFAULT;
 
-const sortByRandom = (photos) => shufflePhotos(photos).slice(0, RANDOM_PHOTO_COUNT);
-const sortByComment = (photos) =>photos.toSorted((a, b) => b.comments.length - a.comments.length);
+const sortByRandom = (photos) => photos.toSorted(() => Math.random() - 0.5).slice(0, RANDOM_PHOTO_COUNT);
+const sortByComment = (photos) => photos.toSorted((a, b) => b.comments.length - a.comments.length);
 
-const getFilteredPhotos = (filter, photos) => {
+const getFilteredPhotos = (filter) => {
+  const photos = getPicturesList();
+
   switch (filter) {
     case FilterType.RANDOM:
       return sortByRandom(photos);
@@ -27,35 +30,32 @@ const getFilteredPhotos = (filter, photos) => {
   }
 };
 
-let currentFilter = FilterType.DEFAULT;
-
-const switchActiveFilterButton = (element) => {
+const switchActiveFilterButton = (el) => {
   const buttonActive = filtersContainer.querySelector('.img-filters__button--active');
   buttonActive?.classList.remove('img-filters__button--active');
-  element.classList.add('img-filters__button--active');
+  el.classList.add('img-filters__button--active');
 };
 
-const repaint = (element) => {
-  const filter = element.id;
-  if (currentFilter === filter) {
+const repaint = (el) => {
+  if (currentFilter === el.id) {
     return;
   }
 
-  const photos = getPicturesList();
-  const filteredPhotos = getFilteredPhotos(filter, photos);
-  initGallery(filteredPhotos);
-  switchActiveFilterButton(element);
-  currentFilter = filter;
+  const filteredPhotos = getFilteredPhotos(el.id);
+  removePictures();
+  renderGallery(filteredPhotos);
+  switchActiveFilterButton(el);
+  currentFilter = el.id;
 };
 
-const debouncedRepaint = debounce((element) => repaint(element), RERENDER_DELAY);
+const debouncedFilter = debounce((el) => repaint(el), RERENDER_DELAY);
 
 export const initFilters = () => {
   filtersContainer.classList.remove('img-filters--inactive');
 
   filtersForm.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('img-filters__button')) {
-      debouncedRepaint(evt.target);
+      debouncedFilter(evt.target);
     }
   });
 };

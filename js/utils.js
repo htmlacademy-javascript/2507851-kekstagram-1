@@ -19,4 +19,3 @@ export const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   };
 };
 
-export const shufflePhotos = (array, amount) => array.slice().sort(() => Math.random() - 0.5).slice(0, amount);
