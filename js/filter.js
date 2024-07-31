@@ -31,6 +31,7 @@ const getFilteredPhotos = (filter) => {
 };
 
 const switchActiveFilterButton = (el) => {
+  currentFilter = el.id;
   const buttonActive = filtersContainer.querySelector('.img-filters__button--active');
   buttonActive?.classList.remove('img-filters__button--active');
   el.classList.add('img-filters__button--active');
