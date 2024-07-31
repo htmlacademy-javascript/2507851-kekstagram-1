@@ -2,6 +2,7 @@ import {resetScale } from './scale.js';
 import {resetEffects } from './effects.js';
 import { showErrorDialog, showSuccessDialog } from './dialogs.js';
 import { sendDate } from './api.js';
+import { onInputChange } from './loading-image.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
@@ -84,6 +85,7 @@ const onCancelButtonClick = () => {
 
 const onFileInputChange = () => {
   showForm();
+  onInputChange();
 };
 
 const toggleSubmitButton = (disabled) => {
