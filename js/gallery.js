@@ -1,9 +1,8 @@
 import { showBigPicture } from './big-image.js';
-import { createPicturesList } from './data.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
-const pictureList = createPicturesList();
+let pictureList = [];
 
 const createPhoto = ({ comments, description, likes, url, id }) => {
   const galleryImage = pictureTemplate.cloneNode(true);
@@ -28,6 +27,16 @@ export const renderGallery = (pictures) => {
   gallery.append(fragment);
 };
 
+export const removePictures = () => {
+  const photosContainer = document.querySelectorAll('.picture');
+  photosContainer.forEach((photo) => photo.remove());
+};
+
+export const initGallery = (pictures) => {
+  pictureList = pictures;
+  renderGallery(pictureList);
+};
+
 gallery.addEventListener('click', (evt) => {
   const thumbnail = evt.target.closest('[data-id]');
 
@@ -42,9 +51,7 @@ gallery.addEventListener('click', (evt) => {
   if (!pictureData) {
     return;
   }
-
   showBigPicture(pictureData);
 });
 
-renderGallery(pictureList);
-
+export const getPicturesList = () => pictureList;
