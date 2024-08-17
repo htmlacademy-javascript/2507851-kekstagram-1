@@ -139,6 +139,7 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
+
 pristine.addValidator(hashtagField, validateHashTags, INVALID_HASHTAG);
 pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);
 
