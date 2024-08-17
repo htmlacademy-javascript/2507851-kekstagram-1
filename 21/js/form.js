@@ -17,10 +17,8 @@ const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const submitButton = form.querySelector('.img-upload__submit');
-const imgUploadForm = document.querySelector('.img-upload__form');
-const imgUploadFile = imgUploadForm.querySelector('.img-upload__input');
-const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview img');
-const effetcsPreview = imgUploadForm.querySelectorAll('.effects__preview');
+const imgUploadPreview = form.querySelector('.img-upload__preview img');
+const effetcsPreview = form.querySelectorAll('.effects__preview');
 
 
 const SubmitButtonText = {
@@ -36,11 +34,12 @@ const pristine = new Pristine(form, {
 
 const isValidType = (file) => {
   const fileName = file.name.toLowerCase();
+
   return FILE_TYPES.some((it) => fileName.endsWith(it));
 };
 
-const onInputChange = () => {
-  const file = imgUploadFile.files[0];
+const setImgPreview = () => {
+  const file = fileField.files[0];
 
   if (file && isValidType(file)) {
     imgUploadPreview.src = URL.createObjectURL(file);
@@ -106,7 +105,7 @@ const onCancelButtonClick = () => {
 
 const onFileInputChange = () => {
   showForm();
-  onInputChange();
+  setImgPreview();
 };
 
 const toggleSubmitButton = (disabled) => {
@@ -133,7 +132,10 @@ form.addEventListener('submit', (evt) => {
           showErrorDialog(err.message);
         }
       )
-      .finally = () => toggleSubmitButton(false);
+      .finally(() => {
+        toggleSubmitButton(false);
+        fileField.value = '';
+      });
   }
 });
 
