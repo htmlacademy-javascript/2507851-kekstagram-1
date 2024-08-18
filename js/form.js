@@ -8,6 +8,7 @@ const MAX_COMMENT_LENGTH = 140;
 const INVALID_HASHTAG = 'Неверный формат хэштэгов';
 const INVALID_MAX_COMMENT_LENGTH = 'длина комментария не может быть больше 140 символов';
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -16,6 +17,9 @@ const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const submitButton = form.querySelector('.img-upload__submit');
+const imgUploadPreview = form.querySelector('.img-upload__preview img');
+const effetcsPreview = form.querySelectorAll('.effects__preview');
+
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -27,6 +31,23 @@ const pristine = new Pristine(form, {
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper__error',
 });
+
+const isValidType = (file) => {
+  const fileName = file.name.toLowerCase();
+
+  return FILE_TYPES.some((it) => fileName.endsWith(it));
+};
+
+const setImgPreview = () => {
+  const file = fileField.files[0];
+
+  if (file && isValidType(file)) {
+    imgUploadPreview.src = URL.createObjectURL(file);
+    effetcsPreview.forEach((preview) => {
+      preview.style.backgroundImage = `url('${imgUploadPreview.src}')`;
+    });
+  }
+};
 
 const showForm = () => {
   overlay.classList.remove('hidden');
@@ -84,6 +105,7 @@ const onCancelButtonClick = () => {
 
 const onFileInputChange = () => {
   showForm();
+  setImgPreview();
 };
 
 const toggleSubmitButton = (disabled) => {
@@ -110,7 +132,10 @@ form.addEventListener('submit', (evt) => {
           showErrorDialog(err.message);
         }
       )
-      .finally(toggleSubmitButton(false));
+      .finally(() => {
+        toggleSubmitButton(false);
+        fileField.value = '';
+      });
   }
 });
 
@@ -120,5 +145,3 @@ pristine.addValidator(commentField, isCommentValid, INVALID_MAX_COMMENT_LENGTH);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
-
-
